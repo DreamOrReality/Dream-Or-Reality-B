@@ -12,4 +12,4 @@ app.use(bodyParser.json())
 // 서버 실행
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-});
+});    
