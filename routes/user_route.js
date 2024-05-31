@@ -8,4 +8,7 @@ router.post('/getUserName', userController.getUserName);
 // 로그인 라우트
 router.post('/login', userController.login);
 
+// 프로젝트 저장 라우트
+router.post('/saveProjects', userController.saveProjects);
+
 module.exports = router;

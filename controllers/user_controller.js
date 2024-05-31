@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
 });
 
 
-// 로그인 컨트롤러
+// 로그인 라우터
 exports.login = (req, res) => {
   const { id, pw } = req.body;
 
@@ -51,4 +51,19 @@ exports.getUserName = (req, res) => {
     });
   });
 };
+
+// 프로젝트 저장 컨트롤러
+exports.saveProjects = (req, res) => {
+  const { UserId, title, deadline, content, recurit } = req.body;
+  const sql = 'INSERT INTO projects (UserId, title, deadline, content, recurit) VALUES (?, ?, ?, ?, ?)';
+
+  connection.query(sql, [UserId, title, deadline, content, recurit], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: '오류가 발생했습니다.' });
+    }
+    return res.status(200).json({message:'프로젝트를 성공적으로 저장했습니다.'});
+  });
+};
+
 
