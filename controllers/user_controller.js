@@ -66,4 +66,18 @@ exports.saveProjects = (req, res) => {
   });
 };
 
+// 회고록 저장 컨트롤러
+exports.saveMemoir = (req, res) => {
+  const { UserId, date, content} = req.body;
+  const sql = 'INSERT INTO memoir (UserId, date, content) VALUES (?, ?, ?)';
+
+  connection.query(sql, [UserId, date, content], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: '오류가 발생했습니다.' });
+    }
+    return res.status(200).json({message:'프로젝트를 성공적으로 저장했습니다.'});
+  });
+};
+
 
