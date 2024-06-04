@@ -33,9 +33,7 @@ exports.login = (req, res) => {
 // 이름 불러오는 라우터
 exports.getUserName = (req, res) => {
   const { UserId } = req.body;
-
   const sql = 'SELECT name FROM user WHERE UserId = ?';
-
   connection.query(sql, [UserId], (err, result) => {
     if (err) {
       console.error(err);
@@ -65,6 +63,26 @@ exports.saveProjects = (req, res) => {
     return res.status(200).json({message:'프로젝트를 성공적으로 저장했습니다.'});
   });
 };
+
+// 프로젝트 불러오는 컨트롤러
+exports.getProjects = (req, res) => {
+  const { UserId } = req.body;
+  const sql = 'SELECT p.title, DATE_FORMAT(p.deadline, "%Y-%m-%d") AS deadline, p.content, p.recurit, DATE_FORMAT(p.createdAt, "%Y-%m-%d") AS createdAt, u.name AS username FROM projects p INNER JOIN user u ON p.UserId = u.UserId WHERE p.UserId = ?';
+  connection.query(sql, [UserId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: '오류가 발생했습니다.' });
+    }
+
+    if (result.length === 0) {
+      return res.status(401).json({ error: '데이터를 찾을 수 없습니다.' });
+    }
+
+    return res.status(200).json(result);
+  });
+};
+
+
 
 // 회고록 저장 컨트롤러
 exports.saveMemoir = (req, res) => {
