@@ -52,10 +52,10 @@ exports.getUserName = (req, res) => {
 
 // 프로젝트 저장 컨트롤러
 exports.saveProjects = (req, res) => {
-  const { UserId, title, deadline, content, recurit } = req.body;
-  const sql = 'INSERT INTO projects (UserId, title, deadline, content, recurit) VALUES (?, ?, ?, ?, ?)';
+  const { UserId, title, deadline, content, recurit, tag } = req.body;
+  const sql = 'INSERT INTO projects (UserId, title, deadline, content, recurit, tag) VALUES (?, ?, ?, ?, ?, ?)';
 
-  connection.query(sql, [UserId, title, deadline, content, recurit], (err, result) => {
+  connection.query(sql, [UserId, title, deadline, content, recurit, tag], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: '오류가 발생했습니다.' });
@@ -67,7 +67,7 @@ exports.saveProjects = (req, res) => {
 // 프로젝트 불러오는 컨트롤러
 exports.getProjects = (req, res) => {
   const { UserId } = req.body;
-  const sql = 'SELECT p.title, DATE_FORMAT(p.deadline, "%Y-%m-%d") AS deadline, p.content, p.recurit, DATE_FORMAT(p.createdAt, "%Y-%m-%d") AS createdAt, u.name AS username FROM projects p INNER JOIN user u ON p.UserId = u.UserId WHERE p.UserId = ?';
+  const sql = 'SELECT p.title, DATE_FORMAT(p.deadline, "%Y-%m-%d") AS deadline, p.content, p.recurit, DATE_FORMAT(p.createdAt, "%Y-%m-%d") AS createdAt, p.tag, u.name AS username FROM projects p INNER JOIN user u ON p.UserId = u.UserId WHERE p.UserId = ?';
   connection.query(sql, [UserId], (err, result) => {
     if (err) {
       console.error(err);
@@ -82,8 +82,6 @@ exports.getProjects = (req, res) => {
   });
 };
 
-
-
 // 회고록 저장 컨트롤러
 exports.saveMemoir = (req, res) => {
   const { UserId, date, content} = req.body;
@@ -95,6 +93,24 @@ exports.saveMemoir = (req, res) => {
       return res.status(500).json({ error: '오류가 발생했습니다.' });
     }
     return res.status(200).json({message:'프로젝트를 성공적으로 저장했습니다.'});
+  });
+};
+
+// 회고록 불러오는 컨트롤러
+exports.getMemoir = (req, res) => {
+  const { UserId, date } = req.body;
+  const sql = 'SELECT content FROM memoir WHERE UserId = ? AND date = ?';
+  connection.query(sql, [UserId, date], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: '오류가 발생했습니다.' });
+    }
+
+    if (result.length === 0) {
+      return res.status(401).json({ error: '데이터를 찾을 수 없습니다.' });
+    }
+
+    return res.status(200).json(result);
   });
 };
 

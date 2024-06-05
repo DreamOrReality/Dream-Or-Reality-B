@@ -12,7 +12,8 @@ router.post('/login', userController.login);
 router.post('/saveProjects', userController.saveProjects);
 router.post('/getProjects', userController.getProjects);
 
-// 회고록 저장 라우트
+// 회고록 저장, 불러오기 라우트
 router.post('/saveMemoir', userController.saveMemoir);
+router.post('/getMemoir', userController.getMemoir);
 
 module.exports = router;
