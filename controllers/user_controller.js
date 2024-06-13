@@ -82,6 +82,25 @@ exports.getProjects = (req, res) => {
   });
 };
 
+// 모든 프로젝트 불러오는 컨트롤러
+exports.getAllProjects = (req, res) => {
+  const sql = 'SELECT p.title, DATE_FORMAT(p.deadline, "%Y-%m-%d") AS deadline, p.content, p.recurit, DATE_FORMAT(p.createdAt, "%Y-%m-%d") AS createdAt, p.tag, u.name AS username FROM projects p INNER JOIN user u ON p.UserId = u.UserId';
+
+  connection.query(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: '오류가 발생했습니다.' });
+    }
+
+    if (result.length === 0) {
+      return res.status(401).json({ error: '데이터를 찾을 수 없습니다.' });
+    }
+
+    return res.status(200).json(result);
+  });
+};
+
+
 // 회고록 저장 컨트롤러
 exports.saveMemoir = (req, res) => {
   const { UserId, date, content} = req.body;
