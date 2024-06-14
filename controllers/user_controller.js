@@ -66,9 +66,14 @@ exports.saveProjects = (req, res) => {
 
 // 프로젝트 불러오는 컨트롤러
 exports.getProjects = (req, res) => {
-  const { UserId } = req.body;
-  const sql = 'SELECT p.title, DATE_FORMAT(p.deadline, "%Y-%m-%d") AS deadline, p.content, p.recurit, DATE_FORMAT(p.createdAt, "%Y-%m-%d") AS createdAt, p.tag, u.name AS username FROM projects p INNER JOIN user u ON p.UserId = u.UserId WHERE p.UserId = ?';
-  connection.query(sql, [UserId], (err, result) => {
+  const userId = req.body.UserId;
+  const sql = `
+    SELECT p.title, DATE_FORMAT(p.deadline, "%Y-%m-%d") AS deadline, p.content, p.recruit, DATE_FORMAT(p.createdAt, "%Y-%m-%d") AS createdAt, p.tag, u.name AS username
+    FROM projects p
+    INNER JOIN user u ON p.UserId = u.UserId
+    WHERE p.UserId = ?
+  `;
+  connection.query(sql, [userId], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: '오류가 발생했습니다.' });
@@ -81,6 +86,7 @@ exports.getProjects = (req, res) => {
     return res.status(200).json(result);
   });
 };
+
 
 // 모든 프로젝트 불러오는 컨트롤러
 exports.getAllProjects = (req, res) => {
@@ -132,5 +138,4 @@ exports.getMemoir = (req, res) => {
     return res.status(200).json(result);
   });
 };
-
 
