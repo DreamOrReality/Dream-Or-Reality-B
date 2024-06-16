@@ -110,7 +110,7 @@ exports.getAllProjects = (req, res) => {
 // 회고록 저장 컨트롤러
 exports.saveMemoir = (req, res) => {
   const { UserId, date, content} = req.body;
-  const sql = 'INSERT INTO memoir (UserId, date, content) VALUES (?, ?, ?)';
+  const sql = 'INSERT INTO Memoirs (UserId, date, content) VALUES (?, ?, ?)';
 
   connection.query(sql, [UserId, date, content], (err, result) => {
     if (err) {
@@ -124,7 +124,7 @@ exports.saveMemoir = (req, res) => {
 // 회고록 불러오는 컨트롤러
 exports.getMemoir = (req, res) => {
   const { UserId, date } = req.body;
-  const sql = 'SELECT content FROM memoir WHERE UserId = ? AND date = ?';
+  const sql = 'SELECT content FROM Memoirs WHERE UserId = ? AND date = ?';
   connection.query(sql, [UserId, date], (err, result) => {
     if (err) {
       console.error(err);
