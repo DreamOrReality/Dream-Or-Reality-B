@@ -52,10 +52,10 @@ exports.getUserName = (req, res) => {
 
 // 프로젝트 저장 컨트롤러
 exports.saveProjects = (req, res) => {
-  const { UserId, title, deadline, content, recurit, tag } = req.body;
-  const sql = 'INSERT INTO projects (UserId, title, deadline, content, recurit, tag) VALUES (?, ?, ?, ?, ?, ?)';
+  const { UserId, title, deadline, content, recruit, tag } = req.body;
+  const sql = 'INSERT INTO projects (UserId, title, deadline, content, recruit, tag) VALUES (?, ?, ?, ?, ?, ?)';
 
-  connection.query(sql, [UserId, title, deadline, content, recurit, tag], (err, result) => {
+  connection.query(sql, [UserId, title, deadline, content, recruit, tag], (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: '오류가 발생했습니다.' });
