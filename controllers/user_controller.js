@@ -65,6 +65,30 @@ exports.saveProjects = (req, res) => {
 };
 
 // 프로젝트 불러오는 컨트롤러
+exports.getUserProjects = (req, res) => {
+  const { ProjectId } = req.body;
+  const sql = `
+    SELECT title, DATE_FORMAT(deadline, "%Y-%m-%d") AS deadline, content, recruit, tag
+    FROM projects
+    WHERE ProjectId = ?
+  `;
+
+  connection.query(sql, [ProjectId], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: '오류가 발생했습니다.' });
+    }
+
+    if (result.length === 0) {
+      return res.status(401).json({ error: '데이터를 찾을 수 없습니다.' });
+    }
+
+    return res.status(200).json(result[0]);
+  });
+};
+
+
+// 프로젝트 불러오는 컨트롤러
 exports.getProjects = (req, res) => {
   const userId = req.body.UserId;
   const sql = `
@@ -84,6 +108,19 @@ exports.getProjects = (req, res) => {
     }
 
     return res.status(200).json(result);
+  });
+};
+
+exports.saveProjects = (req, res) => {
+  const { UserId, title, deadline, content, recruit, tag } = req.body;
+  const sql = 'INSERT INTO projects (UserId, title, deadline, content, recruit, tag) VALUES (?, ?, ?, ?, ?, ?)';
+
+  connection.query(sql, [UserId, title, deadline, content, recruit, tag], (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: '오류가 발생했습니다.' });
+    }
+    return res.status(200).json({message:'프로젝트를 성공적으로 저장했습니다.'});
   });
 };
 
