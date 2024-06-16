@@ -121,10 +121,15 @@ exports.saveMemoir = (req, res) => {
   });
 };
 
-// 회고록 불러오는 컨트롤러
+// 회고록을 불러오는 컨트롤러
 exports.getMemoir = (req, res) => {
   const { UserId, date } = req.body;
-  const sql = 'SELECT content FROM Memoirs WHERE UserId = ? AND date = ?';
+  const sql = `
+    SELECT content 
+    FROM Memoirs 
+    WHERE UserId = ? 
+      AND DATE(createdAt) = ?
+  `;
   connection.query(sql, [UserId, date], (err, result) => {
     if (err) {
       console.error(err);
