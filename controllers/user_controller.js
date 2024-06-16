@@ -90,7 +90,7 @@ exports.getProjects = (req, res) => {
 
 // 모든 프로젝트 불러오는 컨트롤러
 exports.getAllProjects = (req, res) => {
-  const sql = 'SELECT p.ProjectId p.title, DATE_FORMAT(p.deadline, "%Y-%m-%d") AS deadline, p.content, p.recruit, DATE_FORMAT(p.createdAt, "%Y-%m-%d") AS createdAt, p.tag, u.name AS username FROM projects p INNER JOIN user u ON p.UserId = u.UserId';
+  const sql = 'SELECT p.ProjectId, p.title, DATE_FORMAT(p.deadline, "%Y-%m-%d") AS deadline, p.content, p.recruit, DATE_FORMAT(p.createdAt, "%Y-%m-%d") AS createdAt, p.tag, u.name AS username FROM projects p INNER JOIN user u ON p.UserId = u.UserId';
 
   connection.query(sql, (err, result) => {
     if (err) {
